@@ -46,9 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function limpiarNumero(str) {
     if (typeof str !== 'string') return NaN;
-    // 1. Reemplazar comas por puntos para que sea un formato válido para parseFloat
-    // 2. Eliminar puntos de miles
-    // 3. Convertir a flotante
     return parseFloat(str.replace(/\./g, '').replace(',', '.'));
 }
 
@@ -83,8 +80,16 @@ function calcularTasa() {
         iteraciones++;
     }
     
-    const resultadoPorcentaje = (tasa * 100).toFixed(2);
-    mostrarResultado(`La tasa de interés efectiva mensual es: **${resultadoPorcentaje}%**`);
+    // Calculamos la Tasa Efectiva Anual (TEA)
+    const tasaAnual = (Math.pow(1 + tasa, 12) - 1);
+    
+    const resultadoMensual = (tasa * 100).toFixed(2);
+    const resultadoAnual = (tasaAnual * 100).toFixed(2);
+    
+    mostrarResultado(`
+        <p>La tasa de interés efectiva mensual es: **${resultadoMensual}%**</p>
+        <p>La tasa de interés efectiva anual es: **${resultadoAnual}%**</p>
+    `);
 }
 
 // Función para calcular el monto del préstamo
@@ -112,7 +117,7 @@ function calcularPrestamo() {
 // Función para mostrar el resultado en la página
 function mostrarResultado(mensaje) {
     const resultadoDiv = document.getElementById('resultado');
-    resultadoDiv.innerHTML = `<p>${mensaje}</p>`;
+    resultadoDiv.innerHTML = mensaje;
 }
 
 // Función para limpiar los campos al cambiar de opción
