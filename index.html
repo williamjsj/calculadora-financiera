@@ -9,7 +9,7 @@
 <body>
 
     <header>
-        <h1>Interés Compuesto</h1>
+        <h1>Calculadora Financiera</h1>
     </header>
 
     <main>
@@ -19,6 +19,7 @@
             <div class="option-buttons">
                 <button id="btn-calcular-tasa">Calcular Tasa de Interés</button>
                 <button id="btn-calcular-prestamo">Calcular Monto de Préstamo</button>
+                <button id="btn-calcular-cuota">Calcular Cuota Fija</button>
             </div>
 
             <div id="form-tasa" class="form-container" style="display: none;">
@@ -47,6 +48,27 @@
                 <input type="number" id="tiempo-prestamo">
                 
                 <button onclick="calcularPrestamo()">Calcular</button>
+            </div>
+
+            <div id="form-cuota" class="form-container" style="display: none;">
+                <h3>Calcular Cuota Fija</h3>
+                <label for="prestamo-cuota">Valor del Préstamo:</label>
+                <input type="text" id="prestamo-cuota" class="money-input">
+
+                <label for="tasa-cuota">Tasa de Interés:</label>
+                <input type="text" id="tasa-cuota" class="percentage-input">
+                
+                <div class="radio-group">
+                    <input type="radio" id="tasa-mensual" name="tasa-tipo" value="mensual">
+                    <label for="tasa-mensual">Mensual</label>
+                    <input type="radio" id="tasa-anual" name="tasa-tipo" value="anual">
+                    <label for="tasa-anual">Anual</label>
+                </div>
+
+                <label for="tiempo-cuota">Tiempo (en meses):</label>
+                <input type="number" id="tiempo-cuota">
+                
+                <button onclick="calcularCuota()">Calcular</button>
             </div>
             
             <div id="resultado" class="resultado-container">
