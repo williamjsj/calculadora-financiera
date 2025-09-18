@@ -1,5 +1,3 @@
-JavaScript
-
 document.addEventListener('DOMContentLoaded', () => {
     const formTasa = document.getElementById('form-tasa');
     const formPrestamo = document.getElementById('form-prestamo');
