@@ -187,6 +187,8 @@ function calcularCuota() {
     const tipoTasa = document.querySelector('input[name="tasa-tipo"]:checked');
 
     let valido = true;
+    let mensajeError = "Por favor, ingresa valores válidos.";
+
     if (isNaN(prestamo) || prestamo <= 0) {
         aplicarError(document.getElementById('prestamo-cuota'));
         valido = false;
@@ -199,6 +201,7 @@ function calcularCuota() {
         const labels = document.querySelectorAll('label[for^="tasa-"]');
         labels.forEach(label => label.classList.add('error-label'));
         valido = false;
+        mensajeError = "Debes seleccionar el período de tiempo de la tasa de interés (mensual o anual).";
     }
     if (isNaN(tiempo) || tiempo <= 0) {
         aplicarError(document.getElementById('tiempo-cuota'));
@@ -206,7 +209,7 @@ function calcularCuota() {
     }
 
     if (!valido) {
-        mostrarResultado("Por favor, ingresa valores válidos.");
+        mostrarResultado(mensajeError);
         return;
     }
 
