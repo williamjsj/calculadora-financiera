@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interés Compuesto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Interés Compuesto</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Calculadora de Anualidades</h2>
+            <p>Selecciona qué valor deseas calcular:</p>
+            <div class="option-buttons">
+                <button id="btn-calcular-tasa">Calcular Tasa de Interés</button>
+                <button id="btn-calcular-prestamo">Calcular Monto de Préstamo</button>
+            </div>
+
+            <div id="form-tasa" class="form-container" style="display: none;">
+                <h3>Calcular Tasa de Interés</h3>
+                <label for="prestamo-tasa">Valor del Préstamo:</label>
+                <input type="text" id="prestamo-tasa" class="money-input">
+                
+                <label for="tiempo-tasa">Tiempo (en meses):</label>
+                <input type="number" id="tiempo-tasa">
+                
+                <label for="cuota-tasa">Valor de la Cuota Fija:</label>
+                <input type="text" id="cuota-tasa" class="money-input">
+                
+                <button onclick="calcularTasa()">Calcular</button>
+            </div>
+
+            <div id="form-prestamo" class="form-container" style="display: none;">
+                <h3>Calcular Monto de Préstamo</h3>
+                <label for="cuota-prestamo">Valor de la Cuota Fija:</label>
+                <input type="text" id="cuota-prestamo" class="money-input">
+                
+                <label for="tasa-prestamo">Tasa de Interés Efectiva Mensual:</label>
+                <input type="text" id="tasa-prestamo" class="percentage-input">
+                
+                <label for="tiempo-prestamo">Tiempo (en meses):</label>
+                <input type="number" id="tiempo-prestamo">
+                
+                <button onclick="calcularPrestamo()">Calcular</button>
+            </div>
+            
+            <div id="resultado" class="resultado-container">
+                </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Desarrollada por William Salazar</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
