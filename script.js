@@ -40,41 +40,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Formato automático para porcentaje con símbolo %
+    // Formato automático para porcentaje con coma decimal
     percentageInputs.forEach(input => {
         input.addEventListener('input', (e) => {
-            let valor = e.target.value.replace(/[^0-9.]/g, '');
-            e.target.value = valor ? `${valor}%` : '';
+            // Permitir números, coma decimal y borrado
+            let valor = e.target.value.replace(/[^0-9,]/g, '');
+            
+            // Reemplazar múltiples comas por una sola
+            valor = valor.replace(/,+/g, ',');
+            
+            // Limitar a una coma decimal
+            const partes = valor.split(',');
+            if (partes.length > 2) {
+                valor = partes[0] + ',' + partes.slice(1).join('');
+            }
+            
+            e.target.value = valor;
+        });
+        
+        // Agregar el símbolo % al perder el foco
+        input.addEventListener('blur', (e) => {
+            if (e.target.value && !e.target.value.includes('%')) {
+                e.target.value = e.target.value + '%';
+            }
+        });
+        
+        // Quitar el símbolo % al obtener el foco para edición
+        input.addEventListener('focus', (e) => {
+            e.target.value = e.target.value.replace('%', '');
         });
     });
-
-    // Agregamos los event listeners a los botones de cálculo
-    document.getElementById('btn-calcular-tasa').addEventListener('click', calcularTasa);
-    document.getElementById('btn-calcular-prestamo').addEventListener('click', calcularPrestamo);
-    document.getElementById('btn-calcular-cuota').addEventListener('click', calcularCuota);
 });
 
 /**
  * Función para limpiar y convertir una cadena de texto a un número flotante.
+ * Elimina puntos de miles y reemplaza la coma decimal por un punto.
  * @param {string} str - La cadena de texto a limpiar.
  * @returns {number} El número flotante limpio.
  */
 function limpiarNumero(str) {
-    if (typeof str !== 'string' || str.trim() === '') return NaN;
-    // Remueve el símbolo de porcentaje si existe
-    let cleanedStr = str.replace(/%/g, '');
-    // Reemplaza la coma decimal por un punto, si existe
-    cleanedStr = cleanedStr.replace(',', '.');
-    // Elimina los puntos que no son decimales (separadores de miles)
-    let parts = cleanedStr.split('.');
-    if (parts.length > 2) {
-        // Asume que solo el último punto es decimal
-        const lastPart = parts.pop();
-        cleanedStr = parts.join('') + '.' + lastPart;
-    }
-    return parseFloat(cleanedStr);
+    if (typeof str !== 'string') return NaN;
+    
+    // Eliminar símbolo % si está presente
+    let valorLimpio = str.replace('%', '');
+    
+    // Reemplazar coma decimal por punto y eliminar separadores de miles
+    valorLimpio = valorLimpio.replace(/\./g, '').replace(',', '.');
+    
+    return parseFloat(valorLimpio);
 }
-
 
 /**
  * Aplica clases de error a un elemento de input y su label asociado.
@@ -147,12 +161,12 @@ function calcularTasa() {
     // Calculamos la Tasa Efectiva Anual (TEA)
     const tasaAnual = (Math.pow(1 + tasa, 12) - 1);
     
-    const resultadoMensual = (tasa * 100).toFixed(2);
-    const resultadoAnual = (tasaAnual * 100).toFixed(2);
+    const resultadoMensual = (tasa * 100).toFixed(2).replace('.', ',');
+    const resultadoAnual = (tasaAnual * 100).toFixed(2).replace('.', ',');
     
     mostrarResultado(`
-        <p>La tasa de interés efectiva mensual es: **${resultadoMensual}%**</p>
-        <p>La tasa de interés efectiva anual es: **${resultadoAnual}%**</p>
+        <p>La tasa de interés efectiva mensual es: <strong>${resultadoMensual}%</strong></p>
+        <p>La tasa de interés efectiva anual es: <strong>${resultadoAnual}%</strong></p>
     `);
 }
 
@@ -190,7 +204,7 @@ function calcularPrestamo() {
         minimumFractionDigits: 0
     }).format(prestamo);
     
-    mostrarResultado(`El monto de préstamo que te pueden otorgar es: **${prestamoFormateado}**`);
+    mostrarResultado(`El monto de préstamo que te pueden otorgar es: <strong>${prestamoFormateado}</strong>`);
 }
 
 // Función para calcular la cuota fija
@@ -209,7 +223,6 @@ function calcularCuota() {
         aplicarError(document.getElementById('prestamo-cuota'));
         valido = false;
     }
-    // Validamos la tasa de interés, permitiendo valores decimales
     if (isNaN(tasaInput) || tasaInput <= 0) {
         aplicarError(document.getElementById('tasa-cuota'));
         valido = false;
@@ -238,7 +251,8 @@ function calcularCuota() {
         tasa = tasaInput / 100;
     }
     
-    const cuota = prestamo * (tasa / (1 - Math.pow(1 + tasa, -tiempo)));
+    // Fórmula corregida para el cálculo de la cuota
+    const cuota = (prestamo * tasa) / (1 - Math.pow(1 + tasa, -tiempo));
     
     const cuotaFormateada = new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -246,7 +260,7 @@ function calcularCuota() {
         minimumFractionDigits: 0
     }).format(cuota);
     
-    mostrarResultado(`El valor de la cuota fija mensual es: **${cuotaFormateada}**`);
+    mostrarResultado(`El valor de la cuota fija mensual es: <strong>${cuotaFormateada}</strong>`);
 }
 
 // Función para mostrar el resultado en la página
