@@ -181,7 +181,7 @@ function calcularPrestamo() {
 function calcularCuota() {
     limpiarErrores();
     const prestamo = limpiarNumero(document.getElementById('prestamo-cuota').value);
-    let tasa = limpiarNumero(document.getElementById('tasa-cuota').value) / 100;
+    const tasaInput = limpiarNumero(document.getElementById('tasa-cuota').value);
     const tiempo = parseInt(document.getElementById('tiempo-cuota').value);
     
     const tipoTasa = document.querySelector('input[name="tasa-tipo"]:checked');
@@ -193,7 +193,7 @@ function calcularCuota() {
         aplicarError(document.getElementById('prestamo-cuota'));
         valido = false;
     }
-    if (isNaN(tasa) || tasa <= 0) {
+    if (isNaN(tasaInput) || tasaInput <= 0) {
         aplicarError(document.getElementById('tasa-cuota'));
         valido = false;
     }
@@ -213,9 +213,12 @@ function calcularCuota() {
         return;
     }
 
+    let tasa;
     // Convertir la tasa de interés anual a mensual si es necesario
     if (tipoTasa.value === 'anual') {
-        tasa = Math.pow(1 + tasa, 1/12) - 1;
+        tasa = (Math.pow(1 + (tasaInput / 100), 1/12) - 1);
+    } else {
+        tasa = tasaInput / 100;
     }
     
     const cuota = prestamo * (tasa / (1 - Math.pow(1 + tasa, -tiempo)));
