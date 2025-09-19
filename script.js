@@ -47,18 +47,34 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.value = valor ? `${valor}%` : '';
         });
     });
+
+    // Agregamos los event listeners a los botones de cálculo
+    document.getElementById('btn-calcular-tasa').addEventListener('click', calcularTasa);
+    document.getElementById('btn-calcular-prestamo').addEventListener('click', calcularPrestamo);
+    document.getElementById('btn-calcular-cuota').addEventListener('click', calcularCuota);
 });
 
 /**
  * Función para limpiar y convertir una cadena de texto a un número flotante.
- * Elimina puntos de miles y reemplaza la coma decimal por un punto.
  * @param {string} str - La cadena de texto a limpiar.
  * @returns {number} El número flotante limpio.
  */
 function limpiarNumero(str) {
-    if (typeof str !== 'string') return NaN;
-    return parseFloat(str.replace(/\./g, '').replace(',', '.'));
+    if (typeof str !== 'string' || str.trim() === '') return NaN;
+    // Remueve el símbolo de porcentaje si existe
+    let cleanedStr = str.replace(/%/g, '');
+    // Reemplaza la coma decimal por un punto, si existe
+    cleanedStr = cleanedStr.replace(',', '.');
+    // Elimina los puntos que no son decimales (separadores de miles)
+    let parts = cleanedStr.split('.');
+    if (parts.length > 2) {
+        // Asume que solo el último punto es decimal
+        const lastPart = parts.pop();
+        cleanedStr = parts.join('') + '.' + lastPart;
+    }
+    return parseFloat(cleanedStr);
 }
+
 
 /**
  * Aplica clases de error a un elemento de input y su label asociado.
@@ -193,6 +209,7 @@ function calcularCuota() {
         aplicarError(document.getElementById('prestamo-cuota'));
         valido = false;
     }
+    // Validamos la tasa de interés, permitiendo valores decimales
     if (isNaN(tasaInput) || tasaInput <= 0) {
         aplicarError(document.getElementById('tasa-cuota'));
         valido = false;
