@@ -3,83 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interés Compuesto</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Premium Finance Calc | William Salazar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;        /* Azul Oxford - Autoridad */
+            --accent: #10b981;         /* Verde Esmeralda - Éxito/Dinero */
+            --bg-body: #f8fafc;        /* Gris Nube - Limpieza */
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header con degradado profesional */
+        header {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #1e293b 100%);
+            color: var(--white);
+            padding: 3rem 1rem;
+            text-align: center;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+
+        header h1 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            font-size: 2rem;
+        }
+
+        /* Contenedor Principal */
+        main {
+            width: 90%;
+            max-width: 500px;
+            margin-top: -3rem; /* Superposición para diseño moderno */
+        }
+
+        .container {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        /* Sistema de pestañas mejorado */
+        .option-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 0.4rem;
+            border-radius: 14px;
+            margin-bottom: 2rem;
+        }
+
+        .option-buttons button {
+            border: none;
+            background: transparent;
+            padding: 0.75rem 0.2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-buttons button.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Inputs Estilizados */
+        .form-container {
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-wrapper {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--primary);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            background-color: #f0fdf4;
+        }
+
+        /* Botón de Acción */
+        .btn-action {
+            width: 100%;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: var(--transition);
+        }
+
+        .btn-action:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Área de Resultados */
+        .resultado-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 18px;
+            background: #f8fafc;
+            border: 2px solid #f1f5f9;
+            text-align: center;
+        }
+
+        .res-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .res-amount {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
 <body>
 
     <header>
-        <h1>Calculadora Financiera</h1>
+        <h1>SmartCalc Finance</h1>
     </header>
 
     <main>
         <div class="container">
-            <h2>Calculadora de Anualidades</h2>
-            <p>Selecciona qué valor deseas calcular:</p>
-            <div class="option-buttons">
-                <button id="btn-calcular-tasa">Calcular Tasa de Interés</button>
-                <button id="btn-calcular-prestamo">Calcular Monto de Préstamo</button>
-                <button id="btn-calcular-cuota">Calcular Cuota Fija</button>
-            </div>
-
-            <div id="form-tasa" class="form-container" style="display: none;">
-                <h3>Calcular Tasa de Interés</h3>
-                <label for="prestamo-tasa">Valor del Préstamo:</label>
-                <input type="text" id="prestamo-tasa" class="money-input">
-                
-                <label for="tiempo-tasa">Tiempo (en meses):</label>
-                <input type="number" id="tiempo-tasa">
-                
-                <label for="cuota-tasa">Valor de la Cuota Fija:</label>
-                <input type="text" id="cuota-tasa" class="money-input">
-                
-                <button onclick="calcularTasa()">Calcular</button>
-            </div>
-
-            <div id="form-prestamo" class="form-container" style="display: none;">
-                <h3>Calcular Monto de Préstamo</h3>
-                <label for="cuota-prestamo">Valor de la Cuota Fija:</label>
-                <input type="text" id="cuota-prestamo" class="money-input">
-                
-                <label for="tasa-prestamo">Tasa de Interés Efectiva Mensual:</label>
-                <input type="text" id="tasa-prestamo" class="percentage-input">
-                
-                <label for="tiempo-prestamo">Tiempo (en meses):</label>
-                <input type="number" id="tiempo-prestamo">
-                
-                <button onclick="calcularPrestamo()">Calcular</button>
-            </div>
-
-            <div id="form-cuota" class="form-container" style="display: none;">
-                <h3>Calcular Cuota Fija</h3>
-                <label for="prestamo-cuota">Valor del Préstamo:</label>
-                <input type="text" id="prestamo-cuota" class="money-input">
-
-                <label for="tasa-cuota">Tasa de Interés:</label>
-                <input type="text" id="tasa-cuota" class="percentage-input">
-                
-                <div class="radio-group">
-                    <input type="radio" id="tasa-mensual" name="tasa-tipo" value="mensual">
-                    <label for="tasa-mensual">Mensual</label>
-                    <input type="radio" id="tasa-anual" name="tasa-tipo" value="anual">
-                    <label for="tasa-anual">Anual</label>
-                </div>
-
-                <label for="tiempo-cuota">Tiempo (en meses):</label>
-                <input type="number" id="tiempo-cuota">
-                
-                <button onclick="calcularCuota()">Calcular</button>
-            </div>
+            <h2>Gestión de Anualidades</h2>
             
-            <div id="resultado" class="resultado-container">
+            <nav class="option-buttons">
+                <button id="nav-tasa" onclick="switchForm('form-tasa', this)">Tasa</button>
+                <button id="nav-prestamo" onclick="switchForm('form-prestamo', this)">Préstamo</button>
+                <button id="nav-cuota" class="active" onclick="switchForm('form-cuota', this)">Cuota Fija</button>
+            </nav>
+
+            <div id="form-tasa" class="form-container">
+                <div class="input-wrapper">
+                    <label>Capital del Préstamo</label>
+                    <input type="number" id="p-tasa" placeholder="$ 0.00">
+                </div>
+                <div class="input-wrapper">
+                    <label>Número de Pagos (Meses)</label>
+                    <input type="number" id="n-tasa" placeholder="0">
+                </div>
+                <div class="input-wrapper">
+                    <label>Valor de Cuota</label>
+                    <input type="number" id="r-tasa" placeholder="$ 0.00">
+                </div>
+                <button class="btn-action" onclick="calcTasa()">Calcular Interés</button>
+            </div>
+
+            <div id="form-prestamo" class="form-container">
+                <div class="input-wrapper">
+                    <label>Cuota Mensual Deseada</label>
+                    <input type="number" id="r-prest" placeholder="$ 0.00">
+                </div>
+                <div class="input-wrapper">
+                    <label>Interés Mensual (%)</label>
+                    <input type="number" step="0.01" id="i-prest" placeholder="0.00%">
+                </div>
+                <div class="input-wrapper">
+                    <label>Plazo en Meses</label>
+                    <input type="number" id="n-prest" placeholder="0">
+                </div>
+                <button class="btn-action" onclick="calcPrest()">Calcular Capacidad</button>
+            </div>
+
+            <div id="form-cuota" class="form-container" style="display: block;">
+                <div class="input-wrapper">
+                    <label>Monto a Financiar</label>
+                    <input type="number" id="p-cuota" placeholder="$ 0.00">
+                </div>
+                <div class="input-wrapper">
+                    <label>Tasa Mensual Efectiva (%)</label>
+                    <input type="number" step="0.01" id="i-cuota" placeholder="0.00%">
+                </div>
+                <div class="input-wrapper">
+                    <label>Plazo del Crédito (Meses)</label>
+                    <input type="number" id="n-cuota" placeholder="0">
+                </div>
+                <button class="btn-action" onclick="calcCuota()">Calcular Cuota</button>
+            </div>
+
+            <div id="resultado" class="resultado-box">
+                <span class="res-label">Listo para calcular</span>
+                <span class="res-amount">--</span>
             </div>
         </div>
     </main>
 
     <footer>
-        <p>Desarrollada por William Salazar</p>
+        Desarrollado por <strong>William Salazar</strong> • Expert Finance Tools
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Función para cambiar de formulario suavemente
+        function switchForm(id, btn) {
+            document.querySelectorAll('.form-container').forEach(f => f.style.display = 'none');
+            document.querySelectorAll('.option-buttons button').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).style.display = 'block';
+            btn.classList.add('active');
+            updateUI("Listo para calcular", "--");
+        }
+
+        // Formateador de moneda profesional
+        const money = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            maximumFractionDigits: 0
+        });
+
+        function updateUI(label, val) {
+            const res = document.getElementById('resultado');
+            res.querySelector('.res-label').innerText = label;
+            res.querySelector('.res-amount').innerText = val;
+        }
+
+        function calcCuota() {
+            const P = parseFloat(document.getElementById('p-cuota').value);
+            const i = parseFloat(document.getElementById('i-cuota').value) / 100;
+            const n = parseInt(document.getElementById('n-cuota').value);
+
+            if (P && i && n) {
+                const R = P * (i / (1 - Math.pow(1 + i, -n)));
+                updateUI("Tu cuota mensual fija será:", money.format(R));
+            } else { alert("Por favor complete todos los datos"); }
+        }
+
+        function calcPrest() {
+            const R = parseFloat(document.getElementById('r-prest').value);
+            const i = parseFloat(document.getElementById('i-prest').value) / 100;
+            const n = parseInt(document.getElementById('n-prest').value);
+
+            if (R && i && n) {
+                const P = R * ((1 - Math.pow(1 + i, -n)) / i);
+                updateUI("Puedes solicitar un préstamo de:", money.format(P));
+            } else { alert("Por favor complete todos los datos"); }
+        }
+
+        function calcTasa() {
+            const P = parseFloat(document.getElementById('p-tasa').value);
+            const n = parseInt(document.getElementById('n-tasa').value);
+            const R = parseFloat(document.getElementById('r-tasa').value);
+
+            if (P && n && R) {
+                let i = 0.01;
+                for (let j = 0; j < 100; j++) {
+                    let f = R * (1 - Math.pow(1 + i, -n)) - P * i;
+                    let df = R * n * Math.pow(1 + i, -n - 1) - P;
+                    i = i - f / df;
+                }
+                updateUI("La tasa de interés calculada es:", (i * 100).toFixed(2) + "% Mes Vencido");
+            } else { alert("Por favor complete todos los datos"); }
+        }
+    </script>
 </body>
 </html>
